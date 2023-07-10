@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "phonic-monolith-392109",
+  "private_key_id": "d6f2255c2bc64fa12ede024d1a37ab639253fb1c",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDH4SVcWgF6ZAEL\nJPdht+0ZnnfS1jxYn9u5aDLWe2NsnTI42ihFbpzkCmVzs7eeXRVtomHH3dTkSasD\nUQPyLN9NMJgVGJbtxLha39EPTR8J7ycVe5i65sgpCRBZEFOFso0r+5ftG+r6kQaF\noFf9kg4mU+5sqBv9+PsB0y+TYznXOPTb5h1WTXM8cNbGmFr5l8zPZcebT/RG2cED\n851Cf2HBPJoAmFyrkbed6s0f7BxqURnMvUYFmLyacO4CSoSU9EuvrcDU4vtneGfp\n00tM74YoyDlekKDIH26AniMQVSfcAMlM3t+D2fuFdvD7+zdd3eahJo/9vXh3h/zh\nny5Z3yRDAgMBAAECggEABHZDNj+QHuJSn6QQna7UbSj7dcpwiG3xIr9vuxgADTGp\nKFm+YmZovDJ7N00AwVlEnDDuy95o3TvDxIwvcV2NEpUOIBJvdBlbIDQ034mSMs+S\n6MjcjPeP6lKYedSCeM6Wli/EoXdpFHTeV2dP74ouJK7k+Kn8Dfxb5huHyVuCtAo4\nTLAERYRYUk6C31RASMGU4yAArJN6coVfhjsfdAZwTml0dJymFLWDpaFOyWcEeG/i\nA+ZQFmX6ZeAovu/7/xleXnWtJpqCbwFBNkx7KmUFjpeXVbhy/8ODWN8xem2hMJVo\n8UKoS48ZRte/RqDdMxyhaUkUQ98k6DuqYHnxz24xyQKBgQD74kLgFOjZPF0LWUGE\nwowtU1QhfjdiFdnXWwWCg+rpEiUE7C1PHY/YkAvlpBexORREaLTLjN5c5mO92wiz\n6rqa2pc4HsxV1ZkkXyjQ62xF7NFMZvVOdVMhgKXEdNNthP/iw5N/3zOlN7+csCyZ\nrCmNcqAUJxrw87fns3qGQKRZNQKBgQDLJVP6qyZV/i6JIvMqB9LQ4ZQL2jnQT3pk\nkTG0AOra4CEN+zPP5etpQ/LHgzabO6y+VMCQC4b26gYUfTiNdPd3HjkS5hfdeW3W\nQWbad+CzQ/zjSeLwS7WImgkbTiU6kKSXrTxnISstivS6PtV4bVDd1V+Ki6uqy6Fu\nOMLKgSsulwKBgQC/MmHXHKgfdg2etrLgJpknMrCS9+7sWm/QY/xLtP0UzDwjf29p\nNaRiG/2b5DJDyXMT9nL+a8DCvfOKQwBZKd1Z/IF7DQ3IPeoQTNd7tqiqb3f0Sdb9\nJlvi+3dZJ+DxqlpedFy7XN8kE6w0MRq5z5B/GTpf8csmianYjEl+LQVT3QKBgE3Z\naTxnuFI+DWFadmtGAkEwIUcFgyBUROgjSDPeIiJsv94WxT1HtBZsBq70lsmYbdOm\nsQDCmh8ngdr6PeDf0THh8CdQ7BZgwXnZKGxSglbQmCoWF5TUvqWxugmvwc6Wvayu\no7Y13NEgLjbte2siIVpRucJjUg8q6BtQPz3RkFXTAoGASYWApntfCHkKReCojW/m\nK1s8gyMnwsov/h/G3dy3oF0M+x8fcdWsFT48oKoTAORv/EcrdeVU8nYpTIJRzu06\nzCsgKot/9AH0SVpsjibYksN1IyAJ6TfftEtrQbKcHl42ITMYgxkU75xwFy4ZKPPv\nRI6bqB5uDPumNpD8QF08aKU=\n-----END PRIVATE KEY-----\n",
+  "client_email": "keycrew@phonic-monolith-392109.iam.gserviceaccount.com",
+  "client_id": "116827896195620907743",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/keycrew%40phonic-monolith-392109.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

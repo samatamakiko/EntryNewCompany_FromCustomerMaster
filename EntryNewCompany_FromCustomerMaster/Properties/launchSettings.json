@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "EntryNewCompany_FromCustomerMaster": {
+      "commandName": "Project",
+      "commandLineArgs": "--port 7096",
+      "launchBrowser": false
+    }
+  }
+}
