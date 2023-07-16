@@ -10,6 +10,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Collections.Generic;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace EntryNewCompany_FromCustomerMaster
 {
@@ -32,31 +33,37 @@ namespace EntryNewCompany_FromCustomerMaster
             var response = request.Execute();
             var values = response.Values.ToList();
 
-            
-
-
+           
             List<Company> CompanyList = new List<Company>();
             foreach (var value in values)
             {
-                CompanyList.Add(new Company() {CompanyCode = Int32.Parse((string)value[5]),
-                    CompanyName = (string)value[0] });
-
-
-
-                /*foreach (Company aaa in CompanyList)
-                {
-                    Console.WriteLine(aaa.CompanyCode + " " + aaa.CompanyName);
-                }*/
+                CompanyList.Add(new Company() {
+                    CompanyCode = Int32.Parse((string)value[5]),
+                    CompanyName = (string)value[0],
+                    CompanyKana = (string)value[15],
+                    PostCode = (string)value[17],
+                    //CompanyAbbreviation = (string)value[16],//êVÇµÇ¢çÄñ⁄
+                    Prefectures = (string)value[18],
+                    ComponyAddress1 = (string)value[19],
+                    ComponyAddress2 = (string)value[20],
+                    TelephoneNumber = (string)value[24],
+                    CompanyEmail = (string)value[25],
+                    SlackEmail = (string)value[29],
+                    DockName = (string)value[2],
+                });
             }
-            //Console.WriteLine(CompanyList);
 
-
-            foreach (Company aaa in CompanyList)
+         
+            foreach (Company c in CompanyList)
             {
-                Console.WriteLine(aaa.CompanyCode+","+aaa.CompanyName);
+                Console.WriteLine(c.CompanyCode +","+ c.CompanyName +","+ c.CompanyKana +","+ c.PostCode +","+
+                    c.Prefectures +","+ c.ComponyAddress1 +","+ c.ComponyAddress2 +","+ c.TelephoneNumber +","+
+                    c.CompanyEmail +","+ c.SlackEmail +","+ c.DockName);
+                
+               
             }
 
-            //Console.WriteLine(Company[0]);
+           
         }
     }
 
@@ -66,11 +73,11 @@ namespace EntryNewCompany_FromCustomerMaster
         public string CompanyName { get; set; } 
         public string CompanyKana { get; set; }
         public string CompanyAbbreviation { get; set; }//ó™èÃ
-        public int PostCode { get; set; }//óXï÷î‘çÜ
+        public string PostCode { get; set; }//óXï÷î‘çÜ
         public string Prefectures { get; set; }//ìsìπï{åß
         public string ComponyAddress1 { get; set; }
         public string ComponyAddress2 { get; set; }
-        public int TelephoneNumber { get; set; }
+        public string TelephoneNumber { get; set; }
         public string CompanyEmail { get; set; }
         public string SlackEmail { get; set; }
         public string DockName { get; set; }
