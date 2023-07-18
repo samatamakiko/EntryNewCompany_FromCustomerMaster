@@ -27,7 +27,7 @@ namespace EntryNewCompany_FromCustomerMaster
             var sheetsService = new SheetsService(new BaseClientService.Initializer() { HttpClientInitializer = googleCredential });
 
             var spreadsheetId = "1MjYPr8x8hzd9t-1nR6HgcKicK0gTfzsSq2Q0zzpgPSg";
-            var range = "顧客マスタ!A2:AK10";
+            var range = "顧客マスタ!A2:AL";
 
             var request = sheetsService.Spreadsheets.Values.Get(spreadsheetId, range);
             var response = request.Execute();
@@ -37,29 +37,38 @@ namespace EntryNewCompany_FromCustomerMaster
             List<Company> CompanyList = new List<Company>();
             foreach (var value in values)
             {
-                CompanyList.Add(new Company()
+                if (value.Count() == 38)
                 {
-                    CompanyCode = Int32.Parse((string)value[5]),
-                    CompanyName = CompanyList.Count > 0 ? (string)value[0] ?? "" : (string)value[0],
-                    CompanyKana = CompanyList.Count > 15 ? (string)value[15] ?? "" : (string)value[15],
-                    PostCode = ((string)value[17] == "#N/A") ? "aaaaaaaaaaaaa" : (string)value[17],
-                    //CompanyAbbreviation = (string)value[16],//新しい項目
-                    Prefectures = CompanyList.Count > 18 ? (string)value[18] ?? "" : (string)value[18],
-                    ComponyAddress1 = CompanyList.Count > 19 ? (string)value[19] ?? "" : (string)value[19],
-                    ComponyAddress2 = (string)value[20],
-                    TelephoneNumber = (string)value[24],
-                    CompanyEmail = (string)value[25],
-                   // SlackEmail = (string)value[29],
-                    DockName = (string)value[2],
-                }) ;
+                    CompanyList.Add(new Company()
+                    {
+                        //CompanyCode =  Int32.Parse((string)value[5]),
+                        CompanyCode = (string)value[5] ?? "",
+                        CompanyName = ((string)value[0] == null) ? "" : (string)value[0],
+                        CompanyKana = (string)value[15] ?? "",
+                        PostCode = (string)value[17] ?? "",
+                        CompanyAbbreviation = ((string)value[37] == null) ? "" : (string)value[37],
+                        Prefectures = (string)value[18] ?? "",
+                        ComponyAddress1 = (string)value[19] ?? "",
+                        ComponyAddress2 = ((string)value[20] == null) ? "" : (string)value[20],
+                        TelephoneNumber = (string)value[24] ?? "",
+                        CompanyEmail = (string)value[25] ?? "",
+                        SlackEmail = (string)value[29] ?? "",
+                        DockName = (string)value[2] ?? "",
+                    });
+                }
+                else
+                {
+                    Console.WriteLine("");
+                }
+                Console.WriteLine(value.Count());
             }
 
          
             foreach (Company c in CompanyList)
             {
                 Console.WriteLine(c.CompanyCode +","+ c.CompanyName +","+ c.CompanyKana +","+ c.PostCode +","+
-                    c.Prefectures +","+ c.ComponyAddress1 +","+ c.ComponyAddress2 +","+ c.TelephoneNumber +","+
-                    c.CompanyEmail +","+ c.DockName);
+                    c.CompanyAbbreviation +","+c.Prefectures +","+ c.ComponyAddress1 +","+ c.ComponyAddress2 +","+
+                    c.TelephoneNumber +","+c.CompanyEmail +","+ c.SlackEmail+","+ c.DockName);
                 
                
             }
@@ -70,7 +79,7 @@ namespace EntryNewCompany_FromCustomerMaster
 
     public class Company
     {
-        public int CompanyCode { get; set; }
+        public string CompanyCode { get; set; }
         public string CompanyName { get; set; } 
         public string CompanyKana { get; set; }
         public string CompanyAbbreviation { get; set; }//略称
