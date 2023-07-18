@@ -41,15 +41,14 @@ namespace EntryNewCompany_FromCustomerMaster
                 {
                     CompanyList.Add(new Company()
                     {
-                        //CompanyCode =  Int32.Parse((string)value[5]),
                         CompanyCode = (string)value[5] ?? "",
-                        CompanyName = ((string)value[0] == null) ? "" : (string)value[0],
+                        CompanyName = (string)value[0] ?? "",
                         CompanyKana = (string)value[15] ?? "",
                         PostCode = (string)value[17] ?? "",
-                        CompanyAbbreviation = ((string)value[37] == null) ? "" : (string)value[37],
+                        CompanyAbbreviation = (string)value[37] ?? "",
                         Prefectures = (string)value[18] ?? "",
                         ComponyAddress1 = (string)value[19] ?? "",
-                        ComponyAddress2 = ((string)value[20] == null) ? "" : (string)value[20],
+                        ComponyAddress2 = (string)value[20] ?? "",
                         TelephoneNumber = (string)value[24] ?? "",
                         CompanyEmail = (string)value[25] ?? "",
                         SlackEmail = (string)value[29] ?? "",
@@ -60,7 +59,6 @@ namespace EntryNewCompany_FromCustomerMaster
                 {
                     Console.WriteLine("");
                 }
-                Console.WriteLine(value.Count());
             }
 
          
