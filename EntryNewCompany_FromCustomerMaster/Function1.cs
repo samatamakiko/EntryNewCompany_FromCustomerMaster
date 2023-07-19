@@ -29,7 +29,7 @@ namespace EntryNewCompany_FromCustomerMaster
             var googleCredential = GoogleCredential.FromStream(fileStream).CreateScoped(SheetsService.Scope.Spreadsheets);
             var sheetsService = new SheetsService(new BaseClientService.Initializer() { HttpClientInitializer = googleCredential });
             var spreadsheetId = "1MjYPr8x8hzd9t-1nR6HgcKicK0gTfzsSq2Q0zzpgPSg";
-            var range = "顧客マスタ!A431:AL432";
+            var range = "顧客マスタ!A431:AL";
             var request = sheetsService.Spreadsheets.Values.Get(spreadsheetId, range);
             var response = request.Execute();
             var values = response.Values.ToList();
@@ -58,17 +58,11 @@ namespace EntryNewCompany_FromCustomerMaster
 
             }
 
-            using (var connection = new SqlConnection(CompanyList))
-            {
-                var result = connection.Query<Company>(
-                    "MyStoredProcedure",
-                    commandType: CommandType.StoredProcedure
-                ).ToList();
 
 
                 foreach (Company c in CompanyList)
                 {
-                    //杉戸→1100、八潮→1000に倉庫コード変換
+
                     if (c.DockName == "Sugito")
                     {
                         c.DockName = c.DockName.Replace("Sugito", "1100");
@@ -118,10 +112,37 @@ namespace EntryNewCompany_FromCustomerMaster
                         c.Phone + "," + c.Email + "," + c.SlackEmail + "," + c.DockName);
                     }
 
+                    var connectionString = @"Data Source=127.0.0.1;Initial Catalog=BAW; Integrated Security=SSPI;";
+                    using (var connection = new SqlConnection(connectionString))
+                    {
+                        var parameters = new DynamicParameters();
+                        parameters.Add("@CompanyCode", c.CompanyCode);
+                        parameters.Add("@Cmd", "Add");
+                        parameters.Add("@CompanyName", c.CompanyName);
+                        parameters.Add("@Furigana", c.Furigana);
+                        parameters.Add("@CompanyNameS", c.CompanyNameS);
+                        parameters.Add("@PrefName", c.PrefName);
+                        parameters.Add("@ZipCode", c.ZipCode);
+                        parameters.Add("@Address1", c.Address1);
+                        parameters.Add("@Address2", c.Address2);
+                        parameters.Add("@Phone", c.Phone);
+                        parameters.Add("@Email", c.Email);
+                        parameters.Add("@SlackEmail", c.SlackEmail);
+                        parameters.Add("@SiteCode", c.DockName);
+                        parameters.Add("@return_value", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
+
+                        var result = connection.Query<Company>(
+                           "[dbo].[SP_CompanyInitData]",
+                           parameters, commandType: CommandType.StoredProcedure);
+
+                    var output = parameters.Get<int>("@return_value");
+                    Console.WriteLine($"{output}");
 
 
+
+
+                    }
                 }
-            }
         }
     }
 
