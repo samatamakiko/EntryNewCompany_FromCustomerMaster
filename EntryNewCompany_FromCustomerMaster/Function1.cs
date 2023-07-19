@@ -70,6 +70,10 @@ namespace EntryNewCompany_FromCustomerMaster
                     else if (c.DockName == "Yashio")
                     {
                         c.DockName = c.DockName.Replace("Yashio", "1000");
+                    }else if (c.DockName == "Chiba")
+                    {
+                        c.DockName = c.DockName.Replace("Chiba", "1100");
+
                     }
 
                     //•K{€–Ú‚É’l‚ª“ü‚Á‚Ä‚¢‚È‚©‚Á‚½‚çbreak‚·‚é
