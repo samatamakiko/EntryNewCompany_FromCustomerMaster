@@ -63,7 +63,7 @@ namespace EntryNewCompany_FromCustomerMaster
                 foreach (Company c in CompanyList)
                 {
 
-                    if (c.DockName == "Sugito"Å@|| c.DockName == "Chiba")
+                    if (c.DockName == "Sugito")
                     {
                         c.DockName = c.DockName.Replace("Sugito", "1100");
                     }
