@@ -21,7 +21,7 @@ namespace EntryNewCompany_FromCustomerMaster
     {
 
         [FunctionName("Function1")]
-        public void Run([TimerTrigger("0 */5 * * * *", RunOnStartup = true)] TimerInfo myTimer, ILogger log)//5分に一回
+        public void Run([TimerTrigger("0 */15 * * * *", RunOnStartup = true)] TimerInfo myTimer, ILogger log)//5分に一回
         {
             log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
 
@@ -62,7 +62,7 @@ namespace EntryNewCompany_FromCustomerMaster
 
                 foreach (Company c in CompanyList)
                 {
-
+                    //杉戸・千葉→1100、八潮→1000に倉庫コード変換
                     if (c.DockName == "Sugito")
                     {
                         c.DockName = c.DockName.Replace("Sugito", "1100");
