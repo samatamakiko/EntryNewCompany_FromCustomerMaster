@@ -42,6 +42,7 @@ namespace EntryNewCompany_FromCustomerMaster
                 var response = request.Execute();
                 var values = response.Values.ToList();
                 string CompanyCheck = "";
+                
 
                 List<Company> CompanyList = new List<Company>();
                 foreach (var value in values)
@@ -148,28 +149,22 @@ namespace EntryNewCompany_FromCustomerMaster
                        parameters, commandType: CommandType.StoredProcedure);
 
                     var output = parameters.Get<int>("@return_value");
-                  
+
                     Console.WriteLine($"{output}");
 
-                    foreach( var item in CompanyList)
-                    {
-                        Console.WriteLine(item.CompanyName);
-                    }
-                                 
-                        if (output == 1)
+                        if (output == 1)//‰üsƒR[ƒh“ü‚ê‚Ä‚¢‚­
                         {
-                            CompanyCheck = $"{c.CompanyName}‚·‚Å‚É‰ïĞ“o˜^‚³‚ê‚Ä‚¢‚Ü‚·";
+                            CompanyCheck = CompanyCheck +"\r"+ $"{c.CompanyName}@“o˜^Ï";
                         }
                         else if (output == 0)
                         {
-                            CompanyCheck = $"{c.CompanyName}‰ïĞ“o˜^‚³‚ê‚Ü‚µ‚½";
+                            CompanyCheck =@CompanyCheck +"\r"+ $"ššššš{c.CompanyName}‚ªBAW‚Ö“o˜^‚³‚ê‚Ü‚µ‚½ššššš";
                         }
-                       // Console.WriteLine("aaaaaaaaaaaaaaaaaaaaaaaa",c.CompanyName);
                     
                 }
-
             }
-                        return new OkObjectResult(CompanyCheck);
+
+            return new OkObjectResult(CompanyCheck);
         }
     }
 
