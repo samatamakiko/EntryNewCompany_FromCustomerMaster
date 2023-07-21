@@ -37,7 +37,7 @@ namespace EntryNewCompany_FromCustomerMaster
                 var googleCredential = GoogleCredential.FromStream(fileStream).CreateScoped(SheetsService.Scope.Spreadsheets);
                 var sheetsService = new SheetsService(new BaseClientService.Initializer() { HttpClientInitializer = googleCredential });
                 var spreadsheetId = "1MjYPr8x8hzd9t-1nR6HgcKicK0gTfzsSq2Q0zzpgPSg";
-                var range = "顧客マスタのテスト!A431:AL";
+                var range = "顧客マスタ!A431:AL";
                 var request = sheetsService.Spreadsheets.Values.Get(spreadsheetId, range);
                 var response = request.Execute();
                 var values = response.Values.ToList();
@@ -150,9 +150,9 @@ namespace EntryNewCompany_FromCustomerMaster
 
                     var output = parameters.Get<int>("@return_value");
 
-                    Console.WriteLine($"{output}");
+                    //Console.WriteLine($"{output}");
 
-                        if (output == 1)//改行コード入れていく
+                        if (output == 1)
                         {
                             CompanyCheck = CompanyCheck +"\r"+ $"{c.CompanyName}　登録済";
                         }
