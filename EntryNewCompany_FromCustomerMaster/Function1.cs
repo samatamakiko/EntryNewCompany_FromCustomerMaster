@@ -150,15 +150,20 @@ namespace EntryNewCompany_FromCustomerMaster
 
                     var output = parameters.Get<int>("@return_value");
 
-                    //Console.WriteLine($"{output}");
+                    Console.WriteLine($"{output}");
 
-                        if (output == 1)
+                        /*if (output == 1)
                         {
                             CompanyCheck = CompanyCheck +"\r"+ $"{c.CompanyName}@“o˜^Ï";
                         }
                         else if (output == 0)
                         {
                             CompanyCheck =@CompanyCheck +"\r"+ $"ššššš{c.CompanyName}‚ªBAW‚Ö“o˜^‚³‚ê‚Ü‚µ‚½ššššš";
+                        }*/
+                        if (output == 0)
+                        {
+                            CompanyCheck = CompanyCheck + "\r" + $"ššššš{c.CompanyName}‚ªBAW‚Ö“o˜^‚³‚ê‚Ü‚µ‚½ššššš";
+
                         }
                     
                 }
