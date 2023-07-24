@@ -31,23 +31,26 @@ namespace EntryNewCompany_FromCustomerMaster
             [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
             ILogger log)
         {
-            //log.LogInformation("C# HTTP trigger function processed a request.");
+
+                              
+             //log.LogInformation("C# HTTP trigger function processed a request.");
     
-                using var fileStream = new FileStream("./phonic-monolith-392109-d6f2255c2bc6.json", FileMode.Open, FileAccess.Read);
-                var googleCredential = GoogleCredential.FromStream(fileStream).CreateScoped(SheetsService.Scope.Spreadsheets);
-                var sheetsService = new SheetsService(new BaseClientService.Initializer() { HttpClientInitializer = googleCredential });
-                var spreadsheetId = "1MjYPr8x8hzd9t-1nR6HgcKicK0gTfzsSq2Q0zzpgPSg";
-                var range = "ŒÚ‹qƒ}ƒXƒ^!A431:AL";
-                var request = sheetsService.Spreadsheets.Values.Get(spreadsheetId, range);
-                var response = request.Execute();
-                var values = response.Values.ToList();
-                string CompanyCheck = "";
+            using var fileStream = new FileStream("./phonic-monolith-392109-d6f2255c2bc6.json", FileMode.Open, FileAccess.Read);
+            var googleCredential = GoogleCredential.FromStream(fileStream).CreateScoped(SheetsService.Scope.Spreadsheets);
+            var sheetsService = new SheetsService(new BaseClientService.Initializer() { HttpClientInitializer = googleCredential });
+            var spreadsheetId = "1MjYPr8x8hzd9t-1nR6HgcKicK0gTfzsSq2Q0zzpgPSg";
+            var range = "ŒÚ‹qƒ}ƒXƒ^ƒeƒXƒg‚Å‚·!A431:AL";
+            var request = sheetsService.Spreadsheets.Values.Get(spreadsheetId, range);
+            var response = request.Execute();
+            var values = response.Values.ToList();
+            string CompanyCheck = "";
                 
 
-                List<Company> CompanyList = new List<Company>();
-                foreach (var value in values)
+             
+            List<Company> CompanyList = new List<Company>();
+            foreach (var value in values)
                 {
-                    if (value.Count() == 38)
+                   if (value.Count() == 38)
                     {
                         CompanyList.Add(new Company()
                         {
@@ -152,20 +155,20 @@ namespace EntryNewCompany_FromCustomerMaster
 
                     Console.WriteLine($"{output}");
 
-                        /*if (output == 1)
+                   if(output == 1)
+                    {
+                        var sql = "SELECT * FROM TS_CompanyInfo";
+                        var sqldata = connection.Query(sql);
+                        foreach (var s in sqldata)
                         {
-                            CompanyCheck = CompanyCheck +"\r"+ $"{c.CompanyName}@“o˜^Ï";
+                            CompanyCheck = "“o˜^Ï‚İ‚Ì‰ïĞ‚ª‚ ‚è‚Ü‚·";
                         }
-                        else if (output == 0)
-                        {
-                            CompanyCheck =@CompanyCheck +"\r"+ $"ššššš{c.CompanyName}‚ªBAW‚Ö“o˜^‚³‚ê‚Ü‚µ‚½ššššš";
-                        }*/
-                        if (output == 0)
-                        {
-                            CompanyCheck = CompanyCheck + "\r" + $"ššššš{c.CompanyName}‚ªBAW‚Ö“o˜^‚³‚ê‚Ü‚µ‚½ššššš";
+                    }
+                    else if (output == 0)
+                    {
+                        CompanyCheck = CompanyCheck + "\r" + $"ššš{c.CompanyName}‚ªBAW‚Ö“o˜^‚³‚ê‚Ü‚µ‚½ššš";
+                    }
 
-                        }
-                    
                 }
             }
 
