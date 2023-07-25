@@ -20,6 +20,7 @@ using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using System.ComponentModel;
 using Google.Apis.Requests;
+using System.Collections;
 
 namespace EntryNewCompany_FromCustomerMaster
 {
@@ -27,14 +28,12 @@ namespace EntryNewCompany_FromCustomerMaster
     {
 
         [FunctionName("Function1")]
-        public static async Task<IActionResult>  Run(
+        public static async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
             ILogger log)
         {
+            //log.LogInformation("C# HTTP trigger function processed a request.");
 
-                              
-             //log.LogInformation("C# HTTP trigger function processed a request.");
-    
             using var fileStream = new FileStream("./phonic-monolith-392109-d6f2255c2bc6.json", FileMode.Open, FileAccess.Read);
             var googleCredential = GoogleCredential.FromStream(fileStream).CreateScoped(SheetsService.Scope.Spreadsheets);
             var sheetsService = new SheetsService(new BaseClientService.Initializer() { HttpClientInitializer = googleCredential });
@@ -44,13 +43,27 @@ namespace EntryNewCompany_FromCustomerMaster
             var response = request.Execute();
             var values = response.Values.ToList();
             string CompanyCheck = "";
-                
 
-             
-            List<Company> CompanyList = new List<Company>();
-            foreach (var value in values)
+
+
+            //GSÇ∆DBî‰ärÇµÇƒêVÇµÇ¢âÔé–Ç†ÇÍÇŒìoò^Ç∑ÇÈÉtÉçÅ[
+            List<Company2> CompanyList2 = new List<Company2>();
+            var conn = @"Data Source=127.0.0.1;Initial Catalog=BAW; Integrated Security=SSPI;";
+            using (var connection = new SqlConnection(conn))
+            {
+                var aaa = "SELECT CompanyCode FROM TS_CompanyInfo";
+                var sss = connection.Query<string>(aaa);
+                CompanyList2 = sss.Select(s => new Company2()
+                    {
+                        CompanyCode = s
+                    }).ToList();
+            }
+
+
+                List<Company> CompanyList = new List<Company>();
+                foreach (var value in values)
                 {
-                   if (value.Count() == 38)
+                    if (value.Count() == 38)
                     {
                         CompanyList.Add(new Company()
                         {
@@ -69,11 +82,13 @@ namespace EntryNewCompany_FromCustomerMaster
                         });
                     }
                 }
-                
+            
+
+
+
 
             foreach (Company c in CompanyList)
             {
-                //êôåÀÅEêÁótÅ®1100ÅAî™í™Å®1000Ç…ëqå…ÉRÅ[Éhïœä∑
                 if (c.DockName == "Sugito")
                 {
                     c.DockName = c.DockName.Replace("Sugito", "1100");
@@ -123,10 +138,17 @@ namespace EntryNewCompany_FromCustomerMaster
                 }
                 else
                 {
-                    Console.WriteLine(c.CompanyCode + "," + c.CompanyName + "," + c.Furigana + "," + c.ZipCode + "," +
-                    c.CompanyNameS + "," + c.PrefName + "," + c.Address1 + "," + c.Address2 + "," +
-                    c.Phone + "," + c.Email + "," + c.SlackEmail + "," + c.DockName);
+                    /* Console.WriteLine(c.CompanyCode + "," + c.CompanyName + "," + c.Furigana + "," + c.ZipCode + "," +
+                     c.CompanyNameS + "," + c.PrefName + "," + c.Address1 + "," + c.Address2 + "," +
+                     c.Phone + "," + c.Email + "," + c.SlackEmail + "," + c.DockName);*/
                 }
+
+                // check company code
+                if (CompanyList2.Any(d => d.CompanyCode == c.CompanyCode))
+                {
+                    break;
+                }
+
 
                 var connectionString = @"Data Source=127.0.0.1;Initial Catalog=BAW; Integrated Security=SSPI;";
                 using (var connection = new SqlConnection(connectionString))
@@ -147,6 +169,8 @@ namespace EntryNewCompany_FromCustomerMaster
                     parameters.Add("@SiteCode", c.DockName);
                     parameters.Add("@return_value", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
 
+                    
+
                     var result = connection.Query<Company>(
                        "[dbo].[SP_CompanyInitData]",
                        parameters, commandType: CommandType.StoredProcedure);
@@ -155,31 +179,30 @@ namespace EntryNewCompany_FromCustomerMaster
 
                     Console.WriteLine($"{output}");
 
-                   if(output == 1)
-                    {
-                        var sql = "SELECT * FROM TS_CompanyInfo";
-                        var sqldata = connection.Query(sql);
-                        foreach (var s in sqldata)
-                        {
-                            CompanyCheck = "ìoò^çœÇ›ÇÃâÔé–Ç™Ç†ÇËÇ‹Ç∑";
-                        }
-                    }
-                    else if (output == 0)
+
+
+
+
+                    if (output == 0)
                     {
                         CompanyCheck = CompanyCheck + "\r" + $"ÅöÅöÅö{c.CompanyName}Ç™BAWÇ÷ìoò^Ç≥ÇÍÇ‹ÇµÇΩÅöÅöÅö";
+                    }
+                    else
+                    {
+                        CompanyCheck = "ìoò^Ç≈Ç´ÇÈ";
                     }
 
                 }
             }
-
             return new OkObjectResult(CompanyCheck);
         }
+
     }
 
     public class Company
     {
         public string CompanyCode { get; set; }
-        public string CompanyName { get; set; } 
+        public string CompanyName { get; set; }
         public string Furigana { get; set; }
         public string CompanyNameS { get; set; }//ó™èÃ
         public string ZipCode { get; set; }//óXï÷î‘çÜ
@@ -190,9 +213,15 @@ namespace EntryNewCompany_FromCustomerMaster
         public string Email { get; set; }
         public string SlackEmail { get; set; }
         public string DockName { get; set; }
-
-       
     }
+
+    public class Company2
+    {
+        public string CompanyCode { get; set; }
+      
+    }
+
 }
+
 
 
