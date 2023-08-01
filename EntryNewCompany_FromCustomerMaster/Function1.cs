@@ -32,7 +32,7 @@ namespace EntryNewCompany_FromCustomerMaster
     {
 
         [FunctionName("Function1")]
-        public static async Task<IActionResult> Run(
+        public static async Task<IActionResult> RunAsync(
             [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
             ILogger log)
         {
@@ -47,6 +47,8 @@ namespace EntryNewCompany_FromCustomerMaster
             var response = request.Execute();
             var values = response.Values.ToList();
             string CompanyCheck = "";
+            string ZeroOutput = "";
+            string OneOutput = "";
 
 
 
@@ -144,15 +146,17 @@ namespace EntryNewCompany_FromCustomerMaster
                      c.Phone + "," + c.Email + "," + c.SlackEmail + "," + c.DockName);*/
                 }
 
-                
 
-               var result = CompanyList2.Any(d => d.CompanyCode.Contains(c.CompanyCode));
-               
+
+                var result = CompanyList2.Any(d => d.CompanyCode.Contains(c.CompanyCode));
+
                 if (result == true)
                 {
-                    CompanyCheck = "";
-                    
-                } else if (result == false)
+                    OneOutput = "V‚½‚É‰ïĞ“o˜^‚·‚é‰ïĞ‚Í‚ ‚è‚Ü‚¹‚ñ";
+                    ZeroOutput = "";
+
+                }
+                else if (result == false)
                 {
 
                     var connectionString = @"Data Source=127.0.0.1;Initial Catalog=BAW; Integrated Security=SSPI;";
@@ -192,39 +196,48 @@ namespace EntryNewCompany_FromCustomerMaster
 */
                         if (output == 0)
                         {
-                            CompanyCheck = CompanyCheck + "\r" + $"ššš{c.CompanyName}‚ªBAW‚Ö“o˜^‚³‚ê‚Ü‚µ‚½ššš";
+                            ZeroOutput = ZeroOutput + "\r" + $"ššš{c.CompanyName}‚ªBAW‚Ö“o˜^‚³‚ê‚Ü‚µ‚½ššš";
+                            OneOutput = "";
                         }
                     }
-                    
+
                 }
+            }
+            if (ZeroOutput == "")
+            {
+                CompanyCheck = OneOutput;
+                
+            }else if (OneOutput == "")
+            {
+                CompanyCheck = ZeroOutput;
             }
             return new OkObjectResult(CompanyCheck);
         }
+
+        public class Company
+        {
+            public string CompanyCode { get; set; }
+            public string CompanyName { get; set; }
+            public string Furigana { get; set; }
+            public string CompanyNameS { get; set; }//—ªÌ
+            public string ZipCode { get; set; }//—X•Ö”Ô†
+            public string PrefName { get; set; }//“s“¹•{Œ§
+            public string Address1 { get; set; }
+            public string Address2 { get; set; }
+            public string Phone { get; set; }
+            public string Email { get; set; }
+            public string SlackEmail { get; set; }
+            public string DockName { get; set; }
+        }
+
+        public class Company2
+        {
+            public string CompanyCode { get; set; }
+
+        }
+
     }
-
-    public class Company
-    {
-        public string CompanyCode { get; set; }
-        public string CompanyName { get; set; }
-        public string Furigana { get; set; }
-        public string CompanyNameS { get; set; }//—ªÌ
-        public string ZipCode { get; set; }//—X•Ö”Ô†
-        public string PrefName { get; set; }//“s“¹•{Œ§
-        public string Address1 { get; set; }
-        public string Address2 { get; set; }
-        public string Phone { get; set; }
-        public string Email { get; set; }
-        public string SlackEmail { get; set; }
-        public string DockName { get; set; }
     }
-
-    public class Company2
-    {
-        public string CompanyCode { get; set; }
-
-    }
-
-}
 
 
 
