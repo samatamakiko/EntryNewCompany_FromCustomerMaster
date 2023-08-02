@@ -23,8 +23,10 @@ using Google.Apis.Requests;
 using System.Collections;
 using System.ComponentModel.Design;
 using System.Runtime.CompilerServices;
-
-
+using System.Net.Http;
+using System.Text;
+using Google.Apis.Sheets.v4.Data;
+using System.Text.Json.Nodes;
 
 namespace EntryNewCompany_FromCustomerMaster
 {
@@ -42,16 +44,20 @@ namespace EntryNewCompany_FromCustomerMaster
             var googleCredential = GoogleCredential.FromStream(fileStream).CreateScoped(SheetsService.Scope.Spreadsheets);
             var sheetsService = new SheetsService(new BaseClientService.Initializer() { HttpClientInitializer = googleCredential });
             var spreadsheetId = "1MjYPr8x8hzd9t-1nR6HgcKicK0gTfzsSq2Q0zzpgPSg";
-            var range = "å⁄ãqÉ}ÉXÉ^ÉeÉXÉgÇ≈Ç∑!A404:AL";
+            var range = "å⁄ãqÉ}ÉXÉ^ÉeÉXÉgÇ≈Ç∑!A438:AL";
             var request = sheetsService.Spreadsheets.Values.Get(spreadsheetId, range);
             var response = request.Execute();
             var values = response.Values.ToList();
             string CompanyCheck = "";
             string ZeroOutput = "";
             string OneOutput = "";
+            
 
-
-
+            string url = "https://open.larksuite.com/open-apis/bot/v2/hook/6c3dc893-896f-499c-afc8-d1eb99715975";
+           
+            
+            
+            
             //GSÇ∆DBî‰ärÇµÇƒêVÇµÇ¢âÔé–Ç†ÇÍÇŒìoò^Ç∑ÇÈÉtÉçÅ[
             List<Company2> CompanyList2 = new List<Company2>();
             var conn = @"Data Source=127.0.0.1;Initial Catalog=BAW; Integrated Security=SSPI;";
@@ -158,7 +164,6 @@ namespace EntryNewCompany_FromCustomerMaster
                 }
                 else if (result == false)
                 {
-
                     var connectionString = @"Data Source=127.0.0.1;Initial Catalog=BAW; Integrated Security=SSPI;";
                     using (var connection = new SqlConnection(connectionString))
                     {
@@ -189,26 +194,62 @@ namespace EntryNewCompany_FromCustomerMaster
                         Console.WriteLine(c.CompanyCode);
                         Console.WriteLine($"{output}");
 
-
-                        
-                        if (output == 0)
+                        try
                         {
-                            ZeroOutput = ZeroOutput + "\r" + $"ÅöÅöÅö{c.CompanyName}Ç™BAWÇ÷ìoò^Ç≥ÇÍÇ‹ÇµÇΩÅöÅöÅö";
-                            OneOutput = "";
+                            using (var httpClient = new HttpClient())
+                            {
+                               /* var content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
+                                content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+                                var response2 = await httpClient.PostAsync(url, content);
+                                response2.EnsureSuccessStatusCode();
+*/
+                                if (output == 0)
+                                {
+                                    ZeroOutput = ZeroOutput + "\r" + $"ÅöÅöÅö{c.CompanyName}Ç™BAWÇ÷ìoò^Ç≥ÇÍÇ‹ÇµÇΩÅöÅöÅö";
+                                    OneOutput = "";
+                                    //string responseBody = await response2.Content.ReadAsStringAsync();
+                                    //Console.WriteLine(responseBody);
+
+                                    //larkí ím
+                                    string jsonBody = $"{{\"msg_type\":\"text\",\"content\":{{\"text\":\"{c.CompanyName}Ç™BAWÇ÷ìoò^Ç≥ÇÍÇ‹ÇµÇΩ!!\"}}}}";
+                                    var content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
+                                    content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+                                    var response2 = await httpClient.PostAsync(url, content);
+                                    response2.EnsureSuccessStatusCode();
+                                    string responseBody = await response2.Content.ReadAsStringAsync();
+                                    Console.WriteLine(responseBody);
+                                }
+
+                            }
+
                         }
+                        catch (HttpRequestException e)
+                        {
+                            Console.WriteLine($"HTTP Request Exception: {e.Message}");
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine($"Exception: {ex.Message}");
+                        }
+
                     }
+                }
+                if (ZeroOutput == "")
+                {
+                    CompanyCheck = OneOutput;
 
                 }
+                else if (OneOutput == "")
+                {
+                    CompanyCheck = ZeroOutput;
+                }
+
             }
-            if (ZeroOutput == "")
-            {
-                CompanyCheck = OneOutput;
-                
-            }else if (OneOutput == "")
-            {
-                CompanyCheck = ZeroOutput;
-            }
+            
             return new OkObjectResult(CompanyCheck);
+           
+
+            
         }
 
         public class Company
@@ -234,7 +275,7 @@ namespace EntryNewCompany_FromCustomerMaster
         }
 
     }
-    }
+}
 
 
 
