@@ -42,7 +42,7 @@ namespace EntryNewCompany_FromCustomerMaster
             var googleCredential = GoogleCredential.FromStream(fileStream).CreateScoped(SheetsService.Scope.Spreadsheets);
             var sheetsService = new SheetsService(new BaseClientService.Initializer() { HttpClientInitializer = googleCredential });
             var spreadsheetId = "1MjYPr8x8hzd9t-1nR6HgcKicK0gTfzsSq2Q0zzpgPSg";
-            var range = "顧客マスタテストです!A431:AL";
+            var range = "顧客マスタテストです!A404:AL";
             var request = sheetsService.Spreadsheets.Values.Get(spreadsheetId, range);
             var response = request.Execute();
             var values = response.Values.ToList();
@@ -141,9 +141,9 @@ namespace EntryNewCompany_FromCustomerMaster
                 }
                 else
                 {
-                    /* Console.WriteLine(c.CompanyCode + "," + c.CompanyName + "," + c.Furigana + "," + c.ZipCode + "," +
-                     c.CompanyNameS + "," + c.PrefName + "," + c.Address1 + "," + c.Address2 + "," +
-                     c.Phone + "," + c.Email + "," + c.SlackEmail + "," + c.DockName);*/
+                    /*Console.WriteLine(c.CompanyCode + "," + c.CompanyName + "," + c.Furigana + "," + c.ZipCode + "," +
+                    c.CompanyNameS + "," + c.PrefName + "," + c.Address1 + "," + c.Address2 + "," +
+                    c.Phone + "," + c.Email + "," + c.SlackEmail + "," + c.DockName);*/
                 }
 
 
@@ -190,10 +190,7 @@ namespace EntryNewCompany_FromCustomerMaster
                         Console.WriteLine($"{output}");
 
 
-                        /*string stringOutput = output.ToString();
-                        Console.WriteLine(stringOutput.GetType());
-
-*/
+                        
                         if (output == 0)
                         {
                             ZeroOutput = ZeroOutput + "\r" + $"★★★{c.CompanyName}がBAWへ登録されました★★★";
