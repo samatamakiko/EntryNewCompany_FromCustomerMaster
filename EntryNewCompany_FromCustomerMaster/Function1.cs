@@ -27,6 +27,8 @@ using System.Net.Http;
 using System.Text;
 using Google.Apis.Sheets.v4.Data;
 using System.Text.Json.Nodes;
+using Microsoft.Extensions.Configuration;
+using static System.Net.WebRequestMethods;
 
 namespace EntryNewCompany_FromCustomerMaster
 {
@@ -36,11 +38,19 @@ namespace EntryNewCompany_FromCustomerMaster
         [FunctionName("Function1")]
         public static async Task<IActionResult> RunAsync(
             [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
-            ILogger log)
+            ILogger log, ExecutionContext context)
         {
-            //log.LogInformation("C# HTTP trigger function processed a request.");
+            //AzureFunctionsÇ≈ä¬ã´ïœêîê›íË
+            var connectionString =Environment.GetEnvironmentVariable("DB_CONNECTION_STRINGS");
 
-            using var fileStream = new FileStream("./phonic-monolith-392109-d6f2255c2bc6.json", FileMode.Open, FileAccess.Read);
+            /* using var fileStream = Path.Combine(context.FunctionAppDirectory, "phonic-monolith-392109-d6f2255c2bc6.json", FileMode.Open, FileAccess.Read);
+
+             var googleCredential = GoogleCredential.FromStream(fileStream).CreateScoped(SheetsService.Scope.Spreadsheets);
+             var sheetsService = new SheetsService(new BaseClientService.Initializer() { HttpClientInitializer = googleCredential });*/
+            var filePath = Path.Combine(context.FunctionAppDirectory, "phonic-monolith-392109-d6f2255c2bc6.json");
+
+            using var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
+
             var googleCredential = GoogleCredential.FromStream(fileStream).CreateScoped(SheetsService.Scope.Spreadsheets);
             var sheetsService = new SheetsService(new BaseClientService.Initializer() { HttpClientInitializer = googleCredential });
             var spreadsheetId = "1MjYPr8x8hzd9t-1nR6HgcKicK0gTfzsSq2Q0zzpgPSg";
@@ -54,20 +64,20 @@ namespace EntryNewCompany_FromCustomerMaster
             
 
             string url = "https://open.larksuite.com/open-apis/bot/v2/hook/6c3dc893-896f-499c-afc8-d1eb99715975";
-           
-            
-            
-            
+
+
+
+
             //GSÇ∆DBî‰ärÇµÇƒêVÇµÇ¢âÔé–Ç†ÇÍÇŒìoò^Ç∑ÇÈÉtÉçÅ[
             List<Company2> CompanyList2 = new List<Company2>();
-            var conn = @"Data Source=127.0.0.1;Initial Catalog=BAW; Integrated Security=SSPI;";
-            using (var connection = new SqlConnection(conn))
+            using (var connection = new SqlConnection(connectionString))
             {
                 var aaa = "SELECT CompanyCode FROM TS_CompanyInfo";
                 var sss = connection.Query<string>(aaa);
                 CompanyList2 = sss.Select(s => new Company2()
                 {
                     CompanyCode = s
+
                 }).ToList();
             }
 
@@ -164,7 +174,8 @@ namespace EntryNewCompany_FromCustomerMaster
                 }
                 else if (result == false)
                 {
-                    var connectionString = @"Data Source=127.0.0.1;Initial Catalog=BAW; Integrated Security=SSPI;";
+                    //var connectionString = @"Data Source=127.0.0.1;Initial Catalog=BAW; Integrated Security=SSPI;";
+                   // var connectionStrings = configuration.GetConnectionString("DB_CONNECTION_STRING");
                     using (var connection = new SqlConnection(connectionString))
                     {
                         var parameters = new DynamicParameters();
@@ -211,7 +222,7 @@ namespace EntryNewCompany_FromCustomerMaster
                                     //Console.WriteLine(responseBody);
 
                                     //larkí ím
-                                    string jsonBody = $"{{\"msg_type\":\"text\",\"content\":{{\"text\":\"{c.CompanyName}Ç™BAWÇ÷ìoò^Ç≥ÇÍÇ‹ÇµÇΩ!!\"}}}}";
+                                    string jsonBody = $"{{\"msg_type\":\"text\",\"content\":{{\"text\":\"Åy{c.CompanyName}ÅzÇ™BAWÇ÷êVãKâÔé–ìoò^Ç≥ÇÍÇ‹ÇµÇΩ!!\"}}}}";
                                     var content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
                                     content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
                                     var response2 = await httpClient.PostAsync(url, content);
