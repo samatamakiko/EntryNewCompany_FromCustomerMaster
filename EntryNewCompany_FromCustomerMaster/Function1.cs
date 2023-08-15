@@ -29,29 +29,36 @@ using Google.Apis.Sheets.v4.Data;
 using System.Text.Json.Nodes;
 using Microsoft.Extensions.Configuration;
 using static System.Net.WebRequestMethods;
+using Microsoft.Extensions.DependencyInjection;
+
+
 
 namespace EntryNewCompany_FromCustomerMaster
 {
     public class Function1
     {
+        private readonly ILogger<Function1> _logger;
+        public Function1(ILogger<Function1> logger)
+        {
+            _logger = logger;
+        }
 
+        
         [FunctionName("Function1")]
         public static async Task<IActionResult> RunAsync(
             [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
-            ILogger log, ExecutionContext context)
-        {
+            ILogger<Function1> log, ExecutionContext context)
+        {            
             //AzureFunctionsで環境変数設定
             var connectionString =Environment.GetEnvironmentVariable("DB_CONNECTION_STRINGS");
-
-            /* using var fileStream = Path.Combine(context.FunctionAppDirectory, "phonic-monolith-392109-d6f2255c2bc6.json", FileMode.Open, FileAccess.Read);
-
-             var googleCredential = GoogleCredential.FromStream(fileStream).CreateScoped(SheetsService.Scope.Spreadsheets);
-             var sheetsService = new SheetsService(new BaseClientService.Initializer() { HttpClientInitializer = googleCredential });*/
-            var filePath = Path.Combine(context.FunctionAppDirectory, "phonic-monolith-392109-d6f2255c2bc6.json");
-
-            using var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
-
-            var googleCredential = GoogleCredential.FromStream(fileStream).CreateScoped(SheetsService.Scope.Spreadsheets);
+            //var filePath = Path.Combine(context.FunctionAppDirectory, "phonic-monolith-392109-d6f2255c2bc6.json");
+            //using var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
+            //var googleCredential = GoogleCredential.FromStream(fileStream).CreateScoped(SheetsService.Scope.Spreadsheets);
+            Function1 function1 = new Function1(log);
+            function1._logger.LogError("FileRead BeforeExecute");
+            GoogleCredential googleCredential = GoogleCredential.FromFile(Path.Combine(context.FunctionAppDirectory, "phonic-monolith-392109-d6f2255c2bc6.json"))
+                  .CreateScoped(new string[] { SheetsService.Scope.Spreadsheets });
+            function1._logger.LogError("FileRead Executed");
             var sheetsService = new SheetsService(new BaseClientService.Initializer() { HttpClientInitializer = googleCredential });
             var spreadsheetId = "1MjYPr8x8hzd9t-1nR6HgcKicK0gTfzsSq2Q0zzpgPSg";
             var range = "顧客マスタテストです!A438:AL";
@@ -77,7 +84,6 @@ namespace EntryNewCompany_FromCustomerMaster
                 CompanyList2 = sss.Select(s => new Company2()
                 {
                     CompanyCode = s
-
                 }).ToList();
             }
 
