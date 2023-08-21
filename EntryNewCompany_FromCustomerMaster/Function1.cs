@@ -68,7 +68,8 @@ namespace EntryNewCompany_FromCustomerMaster
             string CompanyCheck = "";
             string ZeroOutput = "";
             string OneOutput = "";
-            
+            //
+
 
             string url = "https://open.larksuite.com/open-apis/bot/v2/hook/6c3dc893-896f-499c-afc8-d1eb99715975";
 
